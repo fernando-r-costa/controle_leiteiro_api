@@ -102,3 +102,15 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Config files for VS Code
+.vscode/
+
+# SQLite database file
+*.sqlite
+
+# All .env files
+.env.*
+
+# Test directories
+tests/

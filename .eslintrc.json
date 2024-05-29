@@ -1,16 +1,22 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+  "extends": "standard",
+  "plugins": [
+    "import",
+    "node",
+    "promise"
   ],
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module"
+  "env": {
+    "browser": false,
+    "node": true
   },
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "ignorePatterns": ["node_modules/", "dist/"],
   "rules": {
-    "no-console": "warn",
-    "semi": ["error", "always"],
-    "@typescript-eslint/no-var-requires": "off"
+    "semi": "error",
+    "no-console": "off",
+    "quotes": ["error", "single"],
+    "indent": ["error", 2]
   }
 }
