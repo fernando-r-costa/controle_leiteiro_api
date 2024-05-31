@@ -114,3 +114,6 @@ dist
 
 # Test directories
 tests/
+
+# Certificados de segurança
+*.pem
