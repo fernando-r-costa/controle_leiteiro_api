@@ -1,0 +1,96 @@
+/* eslint-disable no-useless-catch */
+import Farm from '../models/farm.model.js'
+import Farmer from '../models/farmer.model.js'
+
+async function createFarm (farm) {
+  try {
+    const newFarm = await Farm.create(farm)
+    return await getFarm(newFarm.farmId)
+  } catch (err) {
+    throw err
+  }
+}
+
+async function updateFarm (farm) {
+  try {
+    await Farm.update(farm, {
+      where: {
+        farmId: farm.farmId
+      }
+    })
+    return await getFarm(farm.farmId)
+  } catch (err) {
+    throw err
+  }
+}
+
+async function deleteFarm (id) {
+  try {
+    await Farm.destroy({
+      where: {
+        farmId: id
+      }
+    })
+  } catch (err) {
+    throw err
+  }
+}
+
+async function getFarms () {
+  try {
+    return await Farm.findAll()
+  } catch (err) {
+    throw err
+  }
+}
+
+async function getFarm (id) {
+  try {
+    return await Farm.findByPk(id, {
+      include: [
+        {
+          model: Farmer,
+          as: 'farmer',
+          attributes: ['name', 'email', 'phone']
+        }
+      ]
+    })
+  } catch (err) {
+    throw err
+  }
+}
+
+async function getFarmByName (name) {
+  try {
+    return await Farm.findOne({
+      where: {
+        name
+      }
+    })
+  } catch (err) {
+    throw err
+  }
+}
+
+async function getFarmsByFarmerId (farmerId) {
+  try {
+    return await Farm.findOne({
+      where: {
+        farmerId
+      },
+      attributes: ['farmId', 'name', 'farmerId']
+    })
+  } catch (err) {
+    throw err
+  }
+}
+
+export default {
+  createFarm,
+  updateFarm,
+  deleteFarm,
+  getFarms,
+  getFarm,
+  getFarmByName,
+  getFarmsByFarmerId
+}

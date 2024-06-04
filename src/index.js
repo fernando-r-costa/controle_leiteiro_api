@@ -3,7 +3,8 @@ import express from 'express'
 import cors from 'cors'
 import winston from 'winston'
 import 'dotenv/config.js'
-import produtorRouter from './routes/produtor.route.js'
+import farmerRouter from './routes/farmer.route.js'
+import farmRouter from './routes/farm.route.js'
 
 const { combine, timestamp, label, printf } = winston.format
 const myFormat = printf(({ level, message, label, timestamp }) => {
@@ -28,8 +29,8 @@ app.use(cors())
 
 // app.use(Auth.autorizaMiddleware)
 
-app.use('/produtor', produtorRouter)
-// app.use('/autor', autorRouter)
+app.use('/farmer', farmerRouter)
+app.use('/farm', farmRouter)
 // app.use('/livro', livroRouter)
 // app.use('/venda', vendaRouter)
 

@@ -2,14 +2,14 @@ import Sequelize from 'sequelize'
 import bcrypt from 'bcrypt'
 import db from '../repositories/db.js'
 
-const Produtor = db.define('produtor', {
-  produtorId: {
+const Farmer = db.define('farmer', {
+  farmerId: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false
   },
-  nome: {
+  name: {
     type: Sequelize.STRING,
     allowNull: false
   },
@@ -21,23 +21,23 @@ const Produtor = db.define('produtor', {
       isEmail: true
     }
   },
-  senha: {
+  password: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  celular: {
+  phone: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
       len: [10, 11]
     }
   },
-  relatoriosComprados: {
+  reportsBuyed: {
     type: Sequelize.INTEGER,
     allowNull: true,
     defaultValue: 0
   },
-  relatoriosGastos: {
+  reportsSpended: {
     type: Sequelize.INTEGER,
     allowNull: true,
     defaultValue: 0
@@ -45,23 +45,23 @@ const Produtor = db.define('produtor', {
 }, {
   underscored: true,
   defaultScope: {
-    attributes: { exclude: ['senha'] }
+    attributes: { exclude: ['password'] }
   },
   hooks: {
-    beforeCreate: async (produtor) => {
-      if (produtor.senha) {
+    beforeCreate: async (farmer) => {
+      if (farmer.password) {
         const salt = await bcrypt.genSalt(10)
-        produtor.senha = await bcrypt.hash(produtor.senha, salt)
+        farmer.password = await bcrypt.hash(farmer.password, salt)
       }
     },
-    beforeUpdate: async (produtor) => {
-      if (produtor.changed('senha')) {
+    beforeUpdate: async (farmer) => {
+      if (farmer.changed('password')) {
         const salt = await bcrypt.genSalt(10)
-        produtor.senha = await bcrypt.hash(produtor.senha, salt)
+        farmer.password = await bcrypt.hash(farmer.password, salt)
       }
     }
   },
   timestamps: false
 })
 
-export default Produtor
+export default Farmer
