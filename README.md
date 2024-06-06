@@ -19,6 +19,6 @@ A API deverá ter a capacidade de salvar e buscar os dados necessários no banco
 
 ### Autor
 
-<img src="https://drive.google.com/file/d/1qeUJXooKjjlWgfu6c4-RcEMDTwJFad-N/view?usp=sharing" width=120px>
+<img src="./public/frc.gif" width=120px>
 
 - LinkedIn - [Fernando R Costa](https://www.linkedin.com/in/fernando-r-costa/)
