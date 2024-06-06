@@ -6,6 +6,7 @@ import 'dotenv/config.js'
 import farmerRouter from './routes/farmer.route.js'
 import farmRouter from './routes/farm.route.js'
 import animalRouter from './routes/animal.route.js'
+import dairyControlRouter from './routes/dairyControl.route.js'
 
 const { combine, timestamp, label, printf } = winston.format
 const myFormat = printf(({ level, message, label, timestamp }) => {
@@ -33,7 +34,7 @@ app.use(cors())
 app.use('/farmer', farmerRouter)
 app.use('/farm', farmRouter)
 app.use('/animal', animalRouter)
-// app.use('/venda', vendaRouter)
+app.use('/dairy-control', dairyControlRouter)
 
 app.use((err, req, res, next) => {
   logger.error(`${req.method} ${req.baseUrl} - ${err.message}`)
