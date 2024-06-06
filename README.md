@@ -9,15 +9,16 @@ A API deverá ter a capacidade de salvar e buscar os dados necessários no banco
 
 ### Meu processo
 
-- [ ] Base
-- [ ] Rota Produtor
-- [ ] Rota Fazenda
-- [ ] Rota Animal
-- [ ] Rota Pesagem
+- [x] Base
+- [x] Rota Produtor
+- [x] Rota Fazenda
+- [x] Rota Animal
+- [x] Rota Pesagem
+- [ ] Regras de negócio
 - [ ] Rota Relatório Avançado
 
 ### Autor
 
-<img src="./public/frc.gif" width=120px>
+<img src="https://1drv.ms/i/s!Ap8lGY0kugvlmJRIeP8-rBmWnOJbDQ?e=1tdRId" width=120px>
 
 - LinkedIn - [Fernando R Costa](https://www.linkedin.com/in/fernando-r-costa/)
