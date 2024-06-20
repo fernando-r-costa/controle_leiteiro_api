@@ -62,7 +62,7 @@ async function getFarm (id) {
 
 async function getFarmByName (name) {
   try {
-    return await Farm.findOne({
+    return await Farm.findAll({
       where: {
         name
       }
@@ -74,7 +74,7 @@ async function getFarmByName (name) {
 
 async function getFarmsByFarmerId (farmerId) {
   try {
-    return await Farm.findOne({
+    return await Farm.findAll({
       where: {
         farmerId
       },

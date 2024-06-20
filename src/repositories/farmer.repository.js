@@ -57,7 +57,7 @@ async function getFarmerByEmail (email) {
       where: {
         email
       },
-      attributes: ['farmerId', 'name', 'email', 'password']
+      attributes: ['farmerId', 'name', 'email']
     })
   } catch (err) {
     throw err

@@ -11,11 +11,13 @@ const DairyControl = db.define('dairy_control', {
   },
   dairyDateControl: {
     type: Sequelize.DATE,
-    allowNull: false
+    allowNull: false,
+    unique: 'unique_animal_date'
   },
   animalId: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    unique: 'unique_animal_date'
   },
   weightMilking1: {
     type: Sequelize.DECIMAL(10, 1),

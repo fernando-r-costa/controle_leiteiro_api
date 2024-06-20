@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-catch */
 import DairyControl from '../models/dairyControl.model.js'
+import Animal from '../models/animal.model.js'
 
 async function createDairyControl (dairyControl) {
   try {
@@ -35,9 +36,18 @@ async function deleteDairyControl (id) {
   }
 }
 
-async function getDairyControls () {
+async function getDairyControls (farmId) {
   try {
-    return await DairyControl.findAll()
+    if (farmId) {
+      return await DairyControl.findAll({
+        include: {
+          model: Animal,
+          where: { farmId }
+        }
+      })
+    } else {
+      return await DairyControl.findAll()
+    }
   } catch (err) {
     throw err
   }
@@ -79,16 +89,54 @@ async function getAllByAnimalId (animalId) {
   }
 }
 
-async function getAllByDairyDateControl (date) {
+async function getAllByDairyDateControl (farmId, dairyDateControl) {
   try {
-    return await DairyControl.findAll({
-      where: {
-        dairyDateControl: date
-      },
-      order: [
-        ['animalId', 'ASC']
-      ]
-    })
+    if (farmId) {
+      return await DairyControl.findAll({
+        where: {
+          dairyDateControl
+        },
+        include: {
+          model: Animal,
+          where: { farmId }
+        },
+        order: [
+          ['animalId', 'ASC']
+        ]
+      })
+    } else {
+      return await DairyControl.findAll({
+        where: {
+          dairyDateControl
+        },
+        order: [
+          ['animalId', 'ASC']
+        ]
+      })
+    }
+  } catch (err) {
+    throw err
+  }
+}
+
+async function getAllDates (farmId) {
+  try {
+    if (farmId) {
+      return await DairyControl.findAll({
+        attributes: ['dairyDateControl'],
+        include: {
+          model: Animal,
+          attributes: [],
+          where: { farmId }
+        },
+        group: ['dairyDateControl']
+      })
+    } else {
+      return await DairyControl.findAll({
+        attributes: ['dairyDateControl'],
+        group: ['dairyDateControl']
+      })
+    }
   } catch (err) {
     throw err
   }
@@ -102,5 +150,6 @@ export default {
   getDairyControl,
   getDairyControlByAnimalIdAndDate,
   getAllByAnimalId,
-  getAllByDairyDateControl
+  getAllByDairyDateControl,
+  getAllDates
 }

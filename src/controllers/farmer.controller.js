@@ -29,7 +29,7 @@ async function updateFarmer (req, res, next) {
   }
 }
 
-// updateSenha
+// implantar o updateSenha depois do sistema rodando.
 
 async function deleteFarmer (req, res, next) {
   try {

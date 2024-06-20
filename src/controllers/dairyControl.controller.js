@@ -31,7 +31,7 @@ async function updateDairyControl (req, res, next) {
 
 async function deleteDairyControl (req, res, next) {
   try {
-    await DairyControlService.deleteDairyControl(req.params.id)
+    await DairyControlService.deleteDairyControl(req.params.controlId)
     res.end()
     logger.info('DELETE /dairyControl')
   } catch (err) {
@@ -41,7 +41,7 @@ async function deleteDairyControl (req, res, next) {
 
 async function getDairyControls (req, res, next) {
   try {
-    res.send(await DairyControlService.getDairyControls())
+    res.send(await DairyControlService.getDairyControls(req.params.farmId))
     logger.info('GET /dairyControls')
   } catch (err) {
     next(err)
@@ -50,7 +50,7 @@ async function getDairyControls (req, res, next) {
 
 async function getDairyControl (req, res, next) {
   try {
-    res.send(await DairyControlService.getDairyControl(req.params.id))
+    res.send(await DairyControlService.getDairyControl(req.params.controlId))
     logger.info('GET /dairyControl')
   } catch (err) {
     next(err)
@@ -68,8 +68,17 @@ async function getAllByAnimalId (req, res, next) {
 
 async function getAllByDairyDateControl (req, res, next) {
   try {
-    res.send(await DairyControlService.getAllByDairyDateControl(req.params.dairyDateControl))
+    res.send(await DairyControlService.getAllByDairyDateControl(req.params.farmId, req.params.dairyDateControl))
     logger.info('GET /dairyDateControl')
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function getAllDates (req, res, next) {
+  try {
+    res.send(await DairyControlService.getAllDates(req.params.farmId))
+    logger.info('GET /dairyDates')
   } catch (err) {
     next(err)
   }
@@ -82,5 +91,6 @@ export default {
   getDairyControls,
   getDairyControl,
   getAllByAnimalId,
-  getAllByDairyDateControl
+  getAllByDairyDateControl,
+  getAllDates
 }

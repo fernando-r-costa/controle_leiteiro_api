@@ -41,7 +41,7 @@ async function deleteFarm (req, res, next) {
 
 async function getFarms (req, res, next) {
   try {
-    res.send(await FarmService.getFarms())
+    res.send(await FarmService.getFarms(req.params.id))
     logger.info('GET /farms')
   } catch (err) {
     next(err)

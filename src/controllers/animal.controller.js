@@ -4,7 +4,7 @@ import AnimalService from '../services/animal.service.js'
 async function createAnimal (req, res, next) {
   try {
     let animal = req.body
-    if (!((animal.name || animal.number) && animal.calvingDate && animal.farmId)) {
+    if (!animal.number || !animal.calvingDate || !animal.farmId) {
       throw new Error('Campos obrigatórios não preenchidos')
     }
     animal = await AnimalService.createAnimal(animal)
@@ -18,7 +18,7 @@ async function createAnimal (req, res, next) {
 async function updateAnimal (req, res, next) {
   try {
     let animal = req.body
-    if (!animal.animalId || !((animal.name || animal.number) && animal.calvingDate && animal.farmId)) {
+    if (!animal.animalId || !animal.number || !animal.calvingDate || !animal.farmId) {
       throw new Error('Campos obrigatórios não preenchidos')
     }
     animal = await AnimalService.updateAnimal(animal)
@@ -41,7 +41,7 @@ async function deleteAnimal (req, res, next) {
 
 async function getAnimals (req, res, next) {
   try {
-    res.send(await AnimalService.getAnimals())
+    res.send(await AnimalService.getAnimals(req.params.id))
     logger.info('GET /animals')
   } catch (err) {
     next(err)

@@ -15,7 +15,7 @@ const Animal = db.define('animal', {
   },
   number: {
     type: Sequelize.STRING,
-    allowNull: true
+    allowNull: false
   },
   calvingDate: {
     type: Sequelize.DATE,
