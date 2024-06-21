@@ -4,7 +4,7 @@ import DairyControlService from '../services/dairyControl.service.js'
 async function createDairyControl (req, res, next) {
   try {
     let dairyControl = req.body
-    if (!dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1 || !dairyControl.dim) {
+    if (!dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1) {
       throw new Error('Campos obrigatórios não preenchidos')
     }
     dairyControl = await DairyControlService.createDairyControl(dairyControl)
@@ -18,7 +18,7 @@ async function createDairyControl (req, res, next) {
 async function updateDairyControl (req, res, next) {
   try {
     let dairyControl = req.body
-    if (!dairyControl.registerId || !dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1 || !dairyControl.dim) {
+    if (!dairyControl.registerId || !dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1) {
       throw new Error('Campos obrigatórios não preenchidos')
     }
     dairyControl = await DairyControlService.updateDairyControl(dairyControl)

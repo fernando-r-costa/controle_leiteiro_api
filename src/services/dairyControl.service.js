@@ -1,5 +1,6 @@
 import DairyControlRepository from '../repositories/dairyControl.repository.js'
 import AnimalRepository from '../repositories/animal.repository.js'
+import Utils from '../utils/utils.js'
 
 async function createDairyControl (dairyControl) {
   const hasAnimal = await AnimalRepository.getAnimal(dairyControl.animalId)
@@ -10,13 +11,17 @@ async function createDairyControl (dairyControl) {
   if (hasDairyControl) {
     throw new Error('Já existe um registro para este animal na data informada')
   }
-  return await DairyControlRepository.createDairyControl(dairyControl)
+  const { dim, dtc } = Utils.calculateDIMAndDTC(hasAnimal.calvingDate, dairyControl.dairyDateControl, hasAnimal.expectedDate)
+  return await DairyControlRepository.createDairyControl({ ...dairyControl, dim, dtc })
 }
 
 async function updateDairyControl (dairyControl) {
   const hasDairyControl = await DairyControlRepository.getDairyControl(dairyControl.registerId)
   if (!hasDairyControl) {
     throw new Error('Registro não encontrado')
+  }
+  if (dairyControl.registerId !== hasDairyControl.registerId || dairyControl.dairyDateControl !== hasDairyControl.dairyDateControl || dairyControl.animalId !== hasDairyControl.animalId || dairyControl.dim !== hasDairyControl.dim || dairyControl.dtc !== hasDairyControl.dtc) {
+    throw new Error('Não é permitido alterar os campos')
   }
   return await DairyControlRepository.updateDairyControl(dairyControl)
 }
