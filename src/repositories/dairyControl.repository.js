@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import DairyControl from '../models/dairyControl.model.js'
 import Animal from '../models/animal.model.js'
+import Farm from '../models/farm.model.js'
 
 async function createDairyControl (dairyControl) {
   try {
@@ -98,7 +99,10 @@ async function getAllByDairyDateControl (farmId, dairyDateControl) {
         },
         include: {
           model: Animal,
-          where: { farmId }
+          where: { farmId },
+          include: {
+            model: Farm
+          }
         },
         order: [
           ['animalId', 'ASC']

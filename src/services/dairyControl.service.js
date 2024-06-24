@@ -20,7 +20,7 @@ async function updateDairyControl (dairyControl) {
   if (!hasDairyControl) {
     throw new Error('Registro não encontrado')
   }
-  if (dairyControl.registerId !== hasDairyControl.registerId || dairyControl.dairyDateControl !== hasDairyControl.dairyDateControl || dairyControl.animalId !== hasDairyControl.animalId || dairyControl.dim !== hasDairyControl.dim || dairyControl.dtc !== hasDairyControl.dtc) {
+  if (dairyControl.registerId !== hasDairyControl.registerId || dairyControl.dairyDateControl !== hasDairyControl.dairyDateControl || dairyControl.animalId !== hasDairyControl.animalId) {
     throw new Error('Não é permitido alterar os campos')
   }
   return await DairyControlRepository.updateDairyControl(dairyControl)

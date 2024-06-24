@@ -41,7 +41,7 @@ app.use((err, req, res, next) => {
   res.status(400).send({ error: err.message })
 })
 
-const server = app.listen(3000, () => console.log('Controle Leiteiro - API Iniciada!'))
+const server = app.listen(3000, '0.0.0.0', () => console.log('Controle Leiteiro - API Iniciada!'))
 
 export {
   server
