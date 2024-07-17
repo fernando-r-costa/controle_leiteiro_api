@@ -6,7 +6,8 @@ import Sequelize from 'sequelize'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const caCert = fs.readFileSync(path.join(__dirname, '../certs/ca.pem'))
+const caCertPath = process.env.NODE_ENV === 'production' ? '/usr/src/secrets/ca.pem' : path.join(__dirname, '../certs/ca.pem');
+const caCert = fs.readFileSync(caCertPath);
 
 const sequelize = new Sequelize(
   process.env.DATABASE,
