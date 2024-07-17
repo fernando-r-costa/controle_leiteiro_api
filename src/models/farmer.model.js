@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import db from '../repositories/db.js'
 
 const Farmer = db.define('farmer', {

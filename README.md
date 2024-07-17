@@ -14,7 +14,7 @@ A API deverá ter a capacidade de salvar e buscar os dados necessários no banco
 - [x] Rota Fazenda
 - [x] Rota Animal
 - [x] Rota Pesagem
-- [ ] Regras de negócio
+- [x] Regras de negócio
 - [ ] Rota Relatório Avançado
 
 ### Autor
