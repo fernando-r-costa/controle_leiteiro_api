@@ -53,12 +53,15 @@ async function getFarmer (id) {
 
 async function getFarmerByEmail (email) {
   try {
-    return await Farmer.findOne({
-      where: {
-        email
-      },
-      attributes: ['farmerId', 'name', 'email']
-    })
+    return await Farmer.findOne({ where: { email } })
+  } catch (err) {
+    throw err
+  }
+}
+
+async function getFarmerByEmailWithPassword (email) {
+  try {
+    return await Farmer.findOne({ where: { email }, attributes: ['farmerId', 'password'] })
   } catch (err) {
     throw err
   }
@@ -70,5 +73,6 @@ export default {
   deleteFarmer,
   getFarmers,
   getFarmer,
-  getFarmerByEmail
+  getFarmerByEmail,
+  getFarmerByEmailWithPassword
 }
