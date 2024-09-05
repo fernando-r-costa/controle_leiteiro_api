@@ -2,26 +2,35 @@ import FarmerRepository from '../repositories/farmer.repository.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-async function createFarmer (farmer) {
-  const hasFarmer = await FarmerRepository.getFarmerByEmail(farmer.email)
+async function createFarmer ({ name, email, password, phone }) {
+  const hasFarmer = await FarmerRepository.getFarmerByEmail(email)
   if (hasFarmer) {
     throw new Error('Produtor já cadastrado!')
   }
-  farmer.password = await bcrypt.hash(farmer.password, 10)
+  const farmer = { name, email, password, phone }
   return await FarmerRepository.createFarmer(farmer)
 }
 
-async function login (email, password) {
+async function loginFarmer ({ email, password }) {
   const farmer = await FarmerRepository.getFarmerByEmailWithPassword(email)
   if (!farmer) {
     throw new Error('E-mail não encontrado!')
   }
   const isMatch = await bcrypt.compare(password, farmer.password)
   if (!isMatch) {
-    throw new Error('Senha incorreta!')
+    throw new Error('Senha inválida!')
   }
-  const token = jwt.sign({ id: farmer.farmerId }, process.env.JWT_SECRET, { expiresIn: '1h' })
-  return token
+  const token = jwt.sign({ farmerId: farmer.farmerId }, process.env.JWT_SECRET, { expiresIn: '1d' })
+  return { token }
+}
+
+async function updatePassword ({ name, email, password, phone }) {
+  const farmer = await FarmerRepository.getFarmerByEmail(email)
+  if (!farmer || farmer.name !== name || farmer.phone !== phone) {
+    throw new Error('Dados não conferem com os registros')
+  }
+  await FarmerRepository.updatePassword(farmer, password)
+  return await FarmerRepository.getFarmer(farmer.farmerId)
 }
 
 async function updateFarmer (farmer) {
@@ -57,11 +66,12 @@ async function getFarmerByEmailWithPassword (email) {
 
 export default {
   createFarmer,
+  loginFarmer,
+  updatePassword,
   updateFarmer,
   deleteFarmer,
   getFarmers,
   getFarmer,
   getFarmerByEmail,
-  getFarmerByEmailWithPassword,
-  login
+  getFarmerByEmailWithPassword
 }

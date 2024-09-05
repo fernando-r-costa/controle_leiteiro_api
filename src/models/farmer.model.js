@@ -48,16 +48,14 @@ const Farmer = db.define('farmer', {
     attributes: { exclude: ['password'] }
   },
   hooks: {
-    beforeCreate: async (farmer) => {
-      if (farmer.password) {
-        const salt = await bcrypt.genSalt(10)
-        farmer.password = await bcrypt.hash(farmer.password, salt)
-      }
-    },
-    beforeUpdate: async (farmer) => {
-      if (farmer.changed('password')) {
-        const salt = await bcrypt.genSalt(10)
-        farmer.password = await bcrypt.hash(farmer.password, salt)
+    beforeSave: async (farmer) => {
+      if (farmer.password && farmer.changed('password')) {
+        try {
+          const salt = await bcrypt.genSalt(10)
+          farmer.password = await bcrypt.hash(farmer.password, salt)
+        } catch (err) {
+          throw new Error('Erro ao hash da senha: ' + err.message)
+        }
       }
     }
   },

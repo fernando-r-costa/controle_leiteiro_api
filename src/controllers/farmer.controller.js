@@ -1,16 +1,19 @@
 /* eslint-disable no-undef */
 import FarmerService from '../services/farmer.service.js'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+
+const validateRequiredFields = (fields) => {
+  for (const field of fields) {
+    if (!field) {
+      throw new Error('Campos obrigatórios não preenchidos')
+    }
+  }
+}
 
 async function createFarmer (req, res, next) {
   try {
-    let farmer = req.body
-    if (!farmer.name || !farmer.email || !farmer.password || !farmer.phone) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    farmer.password = await bcrypt.hash(farmer.password, 10)
-    farmer = await FarmerService.createFarmer(farmer)
+    const { name, email, password, phone } = req.body
+    validateRequiredFields([name, email, password, phone])
+    const farmer = await FarmerService.createFarmer({ name, email, password, phone })
     res.send(farmer)
     logger.info(`POST /farmer - ${JSON.stringify(farmer)}`)
   } catch (err) {
@@ -18,21 +21,41 @@ async function createFarmer (req, res, next) {
   }
 }
 
-async function updateFarmer (req, res, next) {
+async function loginFarmer (req, res, next) {
   try {
-    let farmer = req.body
-    if (!farmer.farmerId || !farmer.name || !farmer.email || !farmer.phone) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    farmer = await FarmerService.updateFarmer(farmer)
-    res.send(farmer)
-    logger.info(`PUT /farmer - ${JSON.stringify(farmer)}`)
+    const { email, password } = req.body
+    validateRequiredFields([email, password])
+    const result = await FarmerService.loginFarmer({ email, password })
+    res.send(result)
+    logger.info(`POST /farmer/login - ${JSON.stringify(farmer)}`)
   } catch (err) {
     next(err)
   }
 }
 
-// implantar o updateSenha depois do sistema rodando.
+async function updatePassword (req, res, next) {
+  try {
+    const { name, email, password, phone } = req.body
+    validateRequiredFields([name, email, password, phone])
+    const updatedFarmer = await FarmerService.updatePassword({ name, email, password, phone })
+    res.send(updatedFarmer)
+    logger.info(`PUT /farmer/password - ${JSON.stringify(updatedFarmer)}`)
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function updateFarmer (req, res, next) {
+  try {
+    const { farmerId, name, email, phone, reportsBuyed, reportsSpended } = req.body
+    validateRequiredFields([farmerId, name, email, phone])
+    const updatedFarmer = await FarmerService.updateFarmer({ farmerId, name, email, phone, reportsBuyed, reportsSpended })
+    res.send(updatedFarmer)
+    logger.info(`PUT /farmer/update - ${JSON.stringify(updatedFarmer)}`)
+  } catch (err) {
+    next(err)
+  }
+}
 
 async function deleteFarmer (req, res, next) {
   try {
@@ -46,7 +69,8 @@ async function deleteFarmer (req, res, next) {
 
 async function getFarmers (req, res, next) {
   try {
-    res.send(await FarmerService.getFarmers())
+    const farmers = await FarmerService.getFarmers()
+    res.send(farmers)
     logger.info('GET /farmers')
   } catch (err) {
     next(err)
@@ -55,32 +79,9 @@ async function getFarmers (req, res, next) {
 
 async function getFarmer (req, res, next) {
   try {
-    res.send(await FarmerService.getFarmer(req.params.id))
+    const farmer = await FarmerService.getFarmer(req.params.id)
+    res.send(farmer)
     logger.info('GET /farmer')
-  } catch (err) {
-    next(err)
-  }
-}
-
-async function loginFarmer (req, res, next) {
-  try {
-    const { email, password } = req.body
-    if (!email || !password) {
-      throw new Error('E-mail e senha são obrigatórios')
-    }
-
-    const farmer = await FarmerService.getFarmerByEmailWithPassword(email)
-    if (!farmer) {
-      return res.status(401).send({ error: 'E-mail ou senha inválidos' })
-    }
-
-    const isMatch = await bcrypt.compare(password, farmer.password)
-    if (!isMatch) {
-      return res.status(401).send({ error: 'E-mail ou senha inválidos' })
-    }
-
-    const token = jwt.sign({ id: farmer.farmerId }, process.env.JWT_SECRET, { expiresIn: '1d' })
-    res.send({ token })
   } catch (err) {
     next(err)
   }
@@ -88,9 +89,10 @@ async function loginFarmer (req, res, next) {
 
 export default {
   createFarmer,
+  loginFarmer,
+  updatePassword,
   updateFarmer,
   deleteFarmer,
   getFarmers,
-  getFarmer,
-  loginFarmer
+  getFarmer
 }

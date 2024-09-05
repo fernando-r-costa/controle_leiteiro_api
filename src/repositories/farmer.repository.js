@@ -2,73 +2,52 @@
 import Farmer from '../models/farmer.model.js'
 
 async function createFarmer (farmer) {
-  try {
-    const newFarmer = await Farmer.create(farmer)
-    return await getFarmer(newFarmer.farmerId)
-  } catch (err) {
-    throw err
-  }
+  const newFarmer = await Farmer.create(farmer)
+  return await getFarmer(newFarmer.farmerId)
+}
+
+async function updatePassword (farmer, password) {
+  farmer.password = password
+  await farmer.save()
+  return farmer
 }
 
 async function updateFarmer (farmer) {
-  try {
-    await Farmer.update(farmer, {
-      where: {
-        farmerId: farmer.farmerId
-      }
-    })
-    return await getFarmer(farmer.farmerId)
-  } catch (err) {
-    throw err
-  }
+  await Farmer.update(farmer, {
+    where: {
+      farmerId: farmer.farmerId
+    }
+  })
+  return await getFarmer(farmer.farmerId)
 }
 
 async function deleteFarmer (id) {
-  try {
-    await Farmer.destroy({
-      where: {
-        farmerId: id
-      }
-    })
-  } catch (err) {
-    throw err
-  }
+  await Farmer.destroy({
+    where: {
+      farmerId: id
+    }
+  })
 }
 
 async function getFarmers () {
-  try {
-    return await Farmer.findAll()
-  } catch (err) {
-    throw err
-  }
+  return await Farmer.findAll()
 }
 
 async function getFarmer (id) {
-  try {
-    return await Farmer.findByPk(id)
-  } catch (err) {
-    throw err
-  }
+  return await Farmer.findByPk(id)
 }
 
 async function getFarmerByEmail (email) {
-  try {
-    return await Farmer.findOne({ where: { email } })
-  } catch (err) {
-    throw err
-  }
+  return await Farmer.findOne({ where: { email } })
 }
 
 async function getFarmerByEmailWithPassword (email) {
-  try {
-    return await Farmer.findOne({ where: { email }, attributes: ['farmerId', 'password'] })
-  } catch (err) {
-    throw err
-  }
+  return await Farmer.findOne({ where: { email }, attributes: ['farmerId', 'password'] })
 }
 
 export default {
   createFarmer,
+  updatePassword,
   updateFarmer,
   deleteFarmer,
   getFarmers,
