@@ -25,9 +25,9 @@ async function loginFarmer (req, res, next) {
   try {
     const { email, password } = req.body
     validateRequiredFields([email, password])
-    const result = await FarmerService.loginFarmer({ email, password })
-    res.send(result)
-    logger.info(`POST /farmer/login - ${JSON.stringify(farmer)}`)
+    const { token, farmer } = await FarmerService.loginFarmer({ email, password })
+    res.send({ token })
+    logger.info(`POST /farmer/login - ${JSON.stringify({ farmerId: farmer.farmerId, name: farmer.name })}`)
   } catch (err) {
     next(err)
   }
@@ -47,9 +47,9 @@ async function updatePassword (req, res, next) {
 
 async function updateFarmer (req, res, next) {
   try {
-    const { farmerId, name, email, phone, reportsBuyed, reportsSpended } = req.body
+    const { farmerId, name, email, phone } = req.body
     validateRequiredFields([farmerId, name, email, phone])
-    const updatedFarmer = await FarmerService.updateFarmer({ farmerId, name, email, phone, reportsBuyed, reportsSpended })
+    const updatedFarmer = await FarmerService.updateFarmer({ farmerId, name, email, phone })
     res.send(updatedFarmer)
     logger.info(`PUT /farmer/update - ${JSON.stringify(updatedFarmer)}`)
   } catch (err) {

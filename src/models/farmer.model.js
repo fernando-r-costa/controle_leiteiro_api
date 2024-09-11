@@ -32,15 +32,10 @@ const Farmer = db.define('farmer', {
       len: [10, 11]
     }
   },
-  reportsBuyed: {
-    type: Sequelize.INTEGER,
-    allowNull: true,
-    defaultValue: 0
-  },
-  reportsSpended: {
-    type: Sequelize.INTEGER,
-    allowNull: true,
-    defaultValue: 0
+  role: {
+    type: Sequelize.ENUM('farmer', 'admin'),
+    allowNull: false,
+    defaultValue: 'farmer'
   }
 }, {
   underscored: true,

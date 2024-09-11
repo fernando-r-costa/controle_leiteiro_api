@@ -9,7 +9,6 @@ async function createFarmer (farmer) {
 async function updatePassword (farmer, password) {
   farmer.password = password
   await farmer.save()
-  return farmer
 }
 
 async function updateFarmer (farmer) {
@@ -42,7 +41,7 @@ async function getFarmerByEmail (email) {
 }
 
 async function getFarmerByEmailWithPassword (email) {
-  return await Farmer.findOne({ where: { email }, attributes: ['farmerId', 'password'] })
+  return await Farmer.findOne({ where: { email }, attributes: ['farmerId', 'name', 'password', 'role'] })
 }
 
 export default {

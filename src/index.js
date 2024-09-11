@@ -7,7 +7,7 @@ import farmerRouter from './routes/farmer.route.js'
 import farmRouter from './routes/farm.route.js'
 import animalRouter from './routes/animal.route.js'
 import dairyControlRouter from './routes/dairyControl.route.js'
-import authorizeMiddleware from './middlewares/auth.middleware.js'
+import auth from './middlewares/auth.middleware.js'
 
 const { combine, timestamp, label, printf } = winston.format
 const myFormat = printf(({ level, message, label, timestamp }) => {
@@ -31,9 +31,9 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/farmer', farmerRouter)
-app.use('/farm', authorizeMiddleware, farmRouter)
-app.use('/animal', authorizeMiddleware, animalRouter)
-app.use('/dairy-control', authorizeMiddleware, dairyControlRouter)
+app.use('/farm', auth, farmRouter)
+app.use('/animal', auth, animalRouter)
+app.use('/dairy-control', auth, dairyControlRouter)
 
 app.use((err, req, res, next) => {
   logger.error(`${req.method} ${req.baseUrl} - ${err.message}`)

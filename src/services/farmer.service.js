@@ -20,8 +20,8 @@ async function loginFarmer ({ email, password }) {
   if (!isMatch) {
     throw new Error('Senha inválida!')
   }
-  const token = jwt.sign({ farmerId: farmer.farmerId }, process.env.JWT_SECRET, { expiresIn: '1d' })
-  return { token }
+  const token = jwt.sign({ farmerId: farmer.farmerId, role: farmer.role }, process.env.JWT_SECRET, { expiresIn: '1d' })
+  return { token, farmer }
 }
 
 async function updatePassword ({ name, email, password, phone }) {
@@ -30,17 +30,11 @@ async function updatePassword ({ name, email, password, phone }) {
     throw new Error('Dados não conferem com os registros')
   }
   await FarmerRepository.updatePassword(farmer, password)
-  return await FarmerRepository.getFarmer(farmer.farmerId)
+  const updatedFarmer = { name, email, phone }
+  return updatedFarmer
 }
 
 async function updateFarmer (farmer) {
-  const hasFarmer = await FarmerRepository.getFarmerByEmail(farmer.email)
-  if (!hasFarmer) {
-    throw new Error('E-mail não encontrado!')
-  }
-  if (farmer.farmerId !== hasFarmer.farmerId) {
-    throw new Error('O ID e o e-mail não correspondem ao mesmo cadastro!')
-  }
   return await FarmerRepository.updateFarmer(farmer)
 }
 
