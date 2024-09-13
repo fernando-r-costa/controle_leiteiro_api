@@ -16,7 +16,7 @@ async function createDairyControl (dairyControl) {
 }
 
 async function updateDairyControl (dairyControl) {
-  const hasDairyControl = await DairyControlRepository.getDairyControl(dairyControl.registerId)
+  const hasDairyControl = await DairyControlRepository.getDairyControl(dairyControl.registerId, dairyControl.farmerId)
   if (!hasDairyControl) {
     throw new Error('Registro não encontrado')
   }
@@ -26,28 +26,37 @@ async function updateDairyControl (dairyControl) {
   return await DairyControlRepository.updateDairyControl(dairyControl)
 }
 
-async function deleteDairyControl (id) {
-  await DairyControlRepository.deleteDairyControl(id)
+async function deleteDairyControl (params) {
+  const dairyControl = await DairyControlRepository.getDairyControl(params.controlId, params.id)
+  if (dairyControl.message) {
+    throw new Error(dairyControl.message)
+  }
+  if ((parseInt(params.id) !== dairyControl.animal.farm.farmerId) ||
+      (parseInt(params.farmId) !== dairyControl.animal.farmId) ||
+      (parseInt(params.animalId) !== dairyControl.animal.animalId)) {
+    throw new Error('Acesso negado')
+  }
+  await DairyControlRepository.deleteDairyControl(params.controlId)
 }
 
 async function getDairyControls (farmId) {
   return await DairyControlRepository.getDairyControls(farmId)
 }
 
-async function getDairyControl (id) {
-  return await DairyControlRepository.getDairyControl(id)
+async function getDairyControl (params) {
+  return await DairyControlRepository.getDairyControl(params.controlId, params.id)
 }
 
-async function getAllByAnimalId (animalId) {
-  return await DairyControlRepository.getAllByAnimalId(animalId)
+async function getAllByAnimalId (params) {
+  return await DairyControlRepository.getAllByAnimalId(params.animalId, params.id)
 }
 
-async function getAllByDairyDateControl (farmId, dairyDateControl) {
-  return await DairyControlRepository.getAllByDairyDateControl(farmId, dairyDateControl)
+async function getAllByDairyDateControl (params) {
+  return await DairyControlRepository.getAllByDairyDateControl(params.id, params.dairyDateControl)
 }
 
-async function getAllDates (farmId) {
-  return await DairyControlRepository.getAllDates(farmId)
+async function getAllDates (params) {
+  return await DairyControlRepository.getAllDates(params.farmId, params.id)
 }
 
 export default {

@@ -31,7 +31,7 @@ async function updateFarm (req, res, next) {
 
 async function deleteFarm (req, res, next) {
   try {
-    await FarmService.deleteFarm(req.params.id)
+    await FarmService.deleteFarm(req.params.farmId)
     res.end()
     logger.info('DELETE /farm')
   } catch (err) {
@@ -50,7 +50,7 @@ async function getFarms (req, res, next) {
 
 async function getFarm (req, res, next) {
   try {
-    res.send(await FarmService.getFarm(req.params.id))
+    res.send(await FarmService.getFarm(req.params))
     logger.info('GET /farm')
   } catch (err) {
     next(err)

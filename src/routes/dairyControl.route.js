@@ -1,18 +1,17 @@
 import express from 'express'
 import DairyControlController from '../controllers/dairyControl.controller.js'
+import role from '../middlewares/role.middleware.js'
 
 const router = express.Router()
 
-router.post('/', DairyControlController.createDairyControl)
-router.put('/', DairyControlController.updateDairyControl)
-router.delete('/:controlId', DairyControlController.deleteDairyControl)
-router.get('/', DairyControlController.getDairyControls)
-router.get('/:controlId', DairyControlController.getDairyControl)
-router.get('/animal/:animalId', DairyControlController.getAllByAnimalId)
-router.get('/date/dates', DairyControlController.getAllDates)
-router.get('/date/:dairyDateControl', DairyControlController.getAllByDairyDateControl)
-router.get('/farm/:farmId', DairyControlController.getDairyControls)
-router.get('/farm/:farmId/dates', DairyControlController.getAllDates)
-router.get('/farm/:farmId/date/:dairyDateControl', DairyControlController.getAllByDairyDateControl)
+router.post('/', role(), DairyControlController.createDairyControl)
+router.put('/', role(), DairyControlController.updateDairyControl)
+router.delete('/farmer/:id/farm/:farmId/animal/:animalId/:controlId', role(), DairyControlController.deleteDairyControl)
+router.get('/', role('admin'), DairyControlController.getDairyControls)
+router.get('/date/dates', role('admin'), DairyControlController.getAllDates)
+router.get('/farmer/:id/:controlId', role(), DairyControlController.getDairyControl)
+router.get('/farmer/:id/animal/:animalId', role(), DairyControlController.getAllByAnimalId)
+router.get('/farmer/:id/farm/:farmId/dates', role(), DairyControlController.getAllDates)
+router.get('/farmer/:id/farm/:farmId/date/:dairyDateControl', role(), DairyControlController.getAllByDairyDateControl)
 
 export default router

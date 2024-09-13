@@ -6,7 +6,7 @@ import Farm from '../models/farm.model.js'
 async function createDairyControl (dairyControl) {
   try {
     const newDairyControl = await DairyControl.create(dairyControl)
-    return await getDairyControl(newDairyControl.registerId)
+    return await getDairyControl(newDairyControl.registerId, dairyControl.farmerId)
   } catch (err) {
     throw err
   }
@@ -19,7 +19,7 @@ async function updateDairyControl (dairyControl) {
         registerId: dairyControl.registerId
       }
     })
-    return await getDairyControl(dairyControl.registerId)
+    return await getDairyControl(dairyControl.registerId, dairyControl.farmerId)
   } catch (err) {
     throw err
   }
@@ -54,9 +54,22 @@ async function getDairyControls (farmId) {
   }
 }
 
-async function getDairyControl (id) {
+async function getDairyControl (controlId, farmerId) {
   try {
-    return await DairyControl.findByPk(id)
+    const dairyControl = await DairyControl.findByPk(controlId, {
+      include: {
+        model: Animal,
+        include: {
+          model: Farm,
+          attributes: ['farmerId'],
+          where: { farmerId }
+        }
+      }
+    })
+    if (!dairyControl || !dairyControl.animal) {
+      return { message: 'Controle de leite não encontrado.' }
+    }
+    return dairyControl
   } catch (err) {
     throw err
   }
@@ -75,72 +88,90 @@ async function getDairyControlByAnimalIdAndDate (animalId, date) {
   }
 }
 
-async function getAllByAnimalId (animalId) {
+async function getAllByAnimalId (animalId, farmerId) {
   try {
-    return await DairyControl.findAll({
-      where: {
-        animalId
+    const dairyControls = await DairyControl.findAll({
+      include: {
+        model: Animal,
+        where: { animalId },
+        include: {
+          model: Farm,
+          where: { farmerId },
+          attributes: []
+        },
+        attributes: []
       },
-      order: [
-        ['dairyDateControl', 'ASC']
-      ]
+      order: [['dairyDateControl', 'ASC']]
     })
-  } catch (err) {
-    throw err
-  }
-}
-
-async function getAllByDairyDateControl (farmId, dairyDateControl) {
-  try {
-    if (farmId) {
-      return await DairyControl.findAll({
-        where: {
-          dairyDateControl
-        },
-        include: {
-          model: Animal,
-          where: { farmId },
-          include: {
-            model: Farm
-          }
-        },
-        order: [
-          ['animalId', 'ASC']
-        ]
-      })
-    } else {
-      return await DairyControl.findAll({
-        where: {
-          dairyDateControl
-        },
-        order: [
-          ['animalId', 'ASC']
-        ]
-      })
+    if (dairyControls.length === 0) {
+      return { message: 'Animal não encontrado ou nenhum controle de leite encontrado.' }
     }
+    return dairyControls
   } catch (err) {
     throw err
   }
 }
 
-async function getAllDates (farmId) {
+async function getAllByDairyDateControl (farmerId, dairyDateControl) {
   try {
-    if (farmId) {
-      return await DairyControl.findAll({
-        attributes: ['dairyDateControl'],
+    const dairyControls = await DairyControl.findAll({
+      where: {
+        dairyDateControl
+      },
+      include: {
+        model: Animal,
         include: {
-          model: Animal,
+          model: Farm,
+          attributes: ['farmerId'],
+          where: { farmerId }
+        }
+      },
+      order: [['animalId', 'ASC']]
+    })
+    const validDairyControls = dairyControls.filter(dc => dc.animal !== null)
+    if (validDairyControls.length === 0) {
+      return { message: 'Nenhum controle de leite encontrado.' }
+    }
+
+    return dairyControls
+  } catch (err) {
+    throw err
+  }
+}
+
+async function getAllDates (farmId, farmerId) {
+  try {
+    const queryOptions = {
+      attributes: ['dairyDateControl'],
+      group: ['dairyDateControl']
+    }
+    if (farmId) {
+      queryOptions.include = {
+        model: Animal,
+        attributes: [],
+        where: { farmId },
+        include: {
+          model: Farm,
           attributes: [],
-          where: { farmId }
-        },
-        group: ['dairyDateControl']
-      })
-    } else {
-      return await DairyControl.findAll({
-        attributes: ['dairyDateControl'],
-        group: ['dairyDateControl']
-      })
+          where: { farmerId }
+        }
+      }
+    } else if (farmerId) {
+      queryOptions.include = {
+        model: Animal,
+        attributes: [],
+        include: {
+          model: Farm,
+          attributes: [],
+          where: { farmerId }
+        }
+      }
     }
+    const dairyControls = await DairyControl.findAll(queryOptions)
+    if (dairyControls.length === 0) {
+      return { message: 'Nenhum controle de leite encontrado.' }
+    }
+    return dairyControls
   } catch (err) {
     throw err
   }

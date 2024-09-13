@@ -20,25 +20,40 @@ async function updateAnimal (animal) {
   if (!hasAnimal) {
     throw new Error('Animal não encontrado')
   }
-  if (hasAnimal.number !== animal.number || hasAnimal.farmId !== animal.farmId) {
-    throw new Error('Número do animal e Fazenda não são correspondentes')
+  if (hasAnimal.number !== animal.number || hasAnimal.farmId !== animal.farmId || hasAnimal.farm.farmerId !== animal.farmerId) {
+    throw new Error('Número do animal ou Fazenda ou Proprietário não são correspondentes')
   }
   return await AnimalRepository.updateAnimal(animal)
 }
 
-async function deleteAnimal (id) {
-  await AnimalRepository.deleteAnimal(id)
+async function deleteAnimal (params) {
+  const animal = await AnimalRepository.getAnimal(params.animalId)
+  if ((parseInt(params.id) !== animal.farm.farmerId) ||
+      (parseInt(params.farmId) !== animal.farmId)) {
+    throw new Error('Acesso negado')
+  }
+  await AnimalRepository.deleteAnimal(params.animalId)
 }
 
-async function getAnimals (farmId) {
-  if (farmId) {
-    return await AnimalRepository.getAnimalsByFarmId(farmId)
+async function getAnimalsByFarmId (params) {
+  const { farmerId } = await FarmRepository.getFarm(params.farmId)
+  if (parseInt(params.id) !== farmerId) {
+    throw new Error('Acesso negado')
   }
+  return await AnimalRepository.getAnimalsByFarmId(params.farmId)
+}
+
+async function getAnimals () {
   return await AnimalRepository.getAnimals()
 }
 
-async function getAnimal (id) {
-  return await AnimalRepository.getAnimal(id)
+async function getAnimal (params) {
+  const animal = await AnimalRepository.getAnimal(params.animalId)
+  if ((parseInt(params.id) !== animal.farm.farmerId) ||
+      (parseInt(params.farmId) !== animal.farmId)) {
+    throw new Error('Acesso negado')
+  }
+  return await AnimalRepository.getAnimal(params.animalId)
 }
 
 export default {
@@ -46,5 +61,6 @@ export default {
   updateAnimal,
   deleteAnimal,
   getAnimals,
+  getAnimalsByFarmId,
   getAnimal
 }

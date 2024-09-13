@@ -34,8 +34,12 @@ async function getFarms (farmerId) {
   return await FarmRepository.getFarms()
 }
 
-async function getFarm (id) {
-  return await FarmRepository.getFarm(id)
+async function getFarm (params) {
+  const farm = await FarmRepository.getFarm(params.farmId)
+  if (parseInt(params.id) !== farm.farmerId) {
+    throw new Error('Acesso não permitido')
+  }
+  return farm
 }
 
 export default {

@@ -4,7 +4,7 @@ import DairyControlService from '../services/dairyControl.service.js'
 async function createDairyControl (req, res, next) {
   try {
     let dairyControl = req.body
-    if (!dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1) {
+    if (!dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1 || !dairyControl.farmerId) {
       throw new Error('Campos obrigatórios não preenchidos')
     }
     dairyControl = await DairyControlService.createDairyControl(dairyControl)
@@ -18,7 +18,7 @@ async function createDairyControl (req, res, next) {
 async function updateDairyControl (req, res, next) {
   try {
     let dairyControl = req.body
-    if (!dairyControl.registerId || !dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1) {
+    if (!dairyControl.registerId || !dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1 || !dairyControl.farmerId) {
       throw new Error('Campos obrigatórios não preenchidos')
     }
     dairyControl = await DairyControlService.updateDairyControl(dairyControl)
@@ -31,7 +31,7 @@ async function updateDairyControl (req, res, next) {
 
 async function deleteDairyControl (req, res, next) {
   try {
-    await DairyControlService.deleteDairyControl(req.params.controlId)
+    await DairyControlService.deleteDairyControl(req.params)
     res.end()
     logger.info('DELETE /dairyControl')
   } catch (err) {
@@ -50,7 +50,7 @@ async function getDairyControls (req, res, next) {
 
 async function getDairyControl (req, res, next) {
   try {
-    res.send(await DairyControlService.getDairyControl(req.params.controlId))
+    res.send(await DairyControlService.getDairyControl(req.params))
     logger.info('GET /dairyControl')
   } catch (err) {
     next(err)
@@ -59,7 +59,7 @@ async function getDairyControl (req, res, next) {
 
 async function getAllByAnimalId (req, res, next) {
   try {
-    res.send(await DairyControlService.getAllByAnimalId(req.params.animalId))
+    res.send(await DairyControlService.getAllByAnimalId(req.params))
     logger.info('GET /dairyAnimalId')
   } catch (err) {
     next(err)
@@ -68,7 +68,7 @@ async function getAllByAnimalId (req, res, next) {
 
 async function getAllByDairyDateControl (req, res, next) {
   try {
-    res.send(await DairyControlService.getAllByDairyDateControl(req.params.farmId, req.params.dairyDateControl))
+    res.send(await DairyControlService.getAllByDairyDateControl(req.params))
     logger.info('GET /dairyDateControl')
   } catch (err) {
     next(err)
@@ -77,7 +77,7 @@ async function getAllByDairyDateControl (req, res, next) {
 
 async function getAllDates (req, res, next) {
   try {
-    res.send(await DairyControlService.getAllDates(req.params.farmId))
+    res.send(await DairyControlService.getAllDates(req.params))
     logger.info('GET /dairyDates')
   } catch (err) {
     next(err)
