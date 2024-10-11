@@ -1,26 +1,34 @@
 /* eslint-disable no-useless-catch */
+import db from '../repositories/db.js'
 import Animal from '../models/animal.model.js'
 import Farm from '../models/farm.model.js'
 import Farmer from '../models/farmer.model.js'
 
 async function createAnimal (animal) {
+  const transaction = await db.transaction()
   try {
-    const newAnimal = await Animal.create(animal)
+    const newAnimal = await Animal.create(animal, { transaction })
+    await transaction.commit()
     return await getAnimal(newAnimal.animalId)
   } catch (err) {
+    await transaction.rollback()
     throw err
   }
 }
 
 async function updateAnimal (animal) {
+  const transaction = await db.transaction()
   try {
     await Animal.update(animal, {
       where: {
         animalId: animal.animalId
-      }
+      },
+      transaction
     })
+    await transaction.commit()
     return await getAnimal(animal.animalId)
   } catch (err) {
+    await transaction.rollback()
     throw err
   }
 }

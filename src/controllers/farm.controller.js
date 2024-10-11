@@ -1,13 +1,12 @@
 /* eslint-disable no-undef */
 import FarmService from '../services/farm.service.js'
+import validateRequiredFields from '../utils/utils.js'
 
 async function createFarm (req, res, next) {
   try {
-    let farm = req.body
-    if (!farm.name || !farm.farmerId) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    farm = await FarmService.createFarm(farm)
+    const { name, farmerId } = req.body
+    validateRequiredFields([name, farmerId])
+    const farm = await FarmService.createFarm({ name, farmerId })
     res.send(farm)
     logger.info(`POST /farm - ${JSON.stringify(farm)}`)
   } catch (err) {
@@ -17,11 +16,9 @@ async function createFarm (req, res, next) {
 
 async function updateFarm (req, res, next) {
   try {
-    let farm = req.body
-    if (!farm.farmId || !farm.name || !farm.farmerId) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    farm = await FarmService.updateFarm(farm)
+    const { farmId, name, farmerId } = req.body
+    validateRequiredFields([farmId, name, farmerId])
+    const farm = await FarmService.updateFarm({ farmId, name, farmerId })
     res.send(farm)
     logger.info(`PUT /farm - ${JSON.stringify(farm)}`)
   } catch (err) {

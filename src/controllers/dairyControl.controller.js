@@ -1,13 +1,12 @@
 /* eslint-disable no-undef */
 import DairyControlService from '../services/dairyControl.service.js'
+import validateRequiredFields from '../utils/utils.js'
 
 async function createDairyControl (req, res, next) {
   try {
-    let dairyControl = req.body
-    if (!dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1 || !dairyControl.farmerId) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    dairyControl = await DairyControlService.createDairyControl(dairyControl)
+    const { dairyDateControl, animalId, weightMilking1, farmerId } = req.body
+    validateRequiredFields([dairyDateControl, animalId, weightMilking1, farmerId])
+    const dairyControl = await DairyControlService.createDairyControl({ dairyDateControl, animalId, weightMilking1, farmerId })
     res.send(dairyControl)
     logger.info(`POST /dairyControl - ${JSON.stringify(dairyControl)}`)
   } catch (err) {
@@ -17,11 +16,9 @@ async function createDairyControl (req, res, next) {
 
 async function updateDairyControl (req, res, next) {
   try {
-    let dairyControl = req.body
-    if (!dairyControl.registerId || !dairyControl.dairyDateControl || !dairyControl.animalId || !dairyControl.weightMilking1 || !dairyControl.farmerId) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    dairyControl = await DairyControlService.updateDairyControl(dairyControl)
+    const { registerId, dairyDateControl, animalId, weightMilking1, farmerId } = req.body
+    validateRequiredFields([registerId, dairyDateControl, animalId, weightMilking1, farmerId])
+    const dairyControl = await DairyControlService.updateDairyControl({ registerId, dairyDateControl, animalId, weightMilking1, farmerId })
     res.send(dairyControl)
     logger.info(`PUT /dairyControl - ${JSON.stringify(dairyControl)}`)
   } catch (err) {

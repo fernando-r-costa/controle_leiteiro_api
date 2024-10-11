@@ -1,13 +1,6 @@
 /* eslint-disable no-undef */
 import FarmerService from '../services/farmer.service.js'
-
-const validateRequiredFields = (fields) => {
-  for (const field of fields) {
-    if (!field) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-  }
-}
+import validateRequiredFields from '../utils/utils.js'
 
 async function createFarmer (req, res, next) {
   try {

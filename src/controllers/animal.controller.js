@@ -1,13 +1,12 @@
 /* eslint-disable no-undef */
 import AnimalService from '../services/animal.service.js'
+import validateRequiredFields from '../utils/utils.js'
 
 async function createAnimal (req, res, next) {
   try {
-    let animal = req.body
-    if (!animal.number || !animal.calvingDate || !animal.farmerId || !animal.farmId) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    animal = await AnimalService.createAnimal(animal)
+    const { number, calvingDate, farmerId, farmId } = req.body
+    validateRequiredFields([number, calvingDate, farmerId, farmId])
+    const animal = await AnimalService.createAnimal({ number, calvingDate, farmerId, farmId })
     res.send(animal)
     logger.info(`POST /animal - ${JSON.stringify(animal)}`)
   } catch (err) {
@@ -17,11 +16,9 @@ async function createAnimal (req, res, next) {
 
 async function updateAnimal (req, res, next) {
   try {
-    let animal = req.body
-    if (!animal.animalId || !animal.number || !animal.calvingDate || !animal.farmerId || !animal.farmId) {
-      throw new Error('Campos obrigatórios não preenchidos')
-    }
-    animal = await AnimalService.updateAnimal(animal)
+    const { animalId, number, calvingDate, farmerId, farmId } = req.body
+    validateRequiredFields([animalId, number, calvingDate, farmerId, farmId])
+    const animal = await AnimalService.updateAnimal({ animalId, number, calvingDate, farmerId, farmId })
     res.send(animal)
     logger.info(`PUT /animal - ${JSON.stringify(animal)}`)
   } catch (err) {

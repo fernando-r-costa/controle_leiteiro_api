@@ -1,25 +1,33 @@
 /* eslint-disable no-useless-catch */
+import db from '../repositories/db.js'
 import Farm from '../models/farm.model.js'
 import Farmer from '../models/farmer.model.js'
 
 async function createFarm (farm) {
+  const transaction = await db.transaction()
   try {
-    const newFarm = await Farm.create(farm)
+    const newFarm = await Farm.create(farm, { transaction })
+    await transaction.commit()
     return await getFarm(newFarm.farmId)
   } catch (err) {
+    await transaction.rollback()
     throw err
   }
 }
 
 async function updateFarm (farm) {
+  const transaction = await db.transaction()
   try {
     await Farm.update(farm, {
       where: {
         farmId: farm.farmId
-      }
+      },
+      transaction
     })
+    await transaction.commit()
     return await getFarm(farm.farmId)
   } catch (err) {
+    await transaction.rollback()
     throw err
   }
 }

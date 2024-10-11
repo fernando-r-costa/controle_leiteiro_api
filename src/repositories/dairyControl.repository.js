@@ -1,38 +1,50 @@
 /* eslint-disable no-useless-catch */
+import db from '../repositories/db.js'
 import DairyControl from '../models/dairyControl.model.js'
 import Animal from '../models/animal.model.js'
 import Farm from '../models/farm.model.js'
 
 async function createDairyControl (dairyControl) {
+  const transaction = await db.transaction()
   try {
-    const newDairyControl = await DairyControl.create(dairyControl)
+    const newDairyControl = await DairyControl.create(dairyControl, { transaction })
+    await transaction.commit()
     return await getDairyControl(newDairyControl.registerId, dairyControl.farmerId)
   } catch (err) {
+    await transaction.rollback()
     throw err
   }
 }
 
 async function updateDairyControl (dairyControl) {
+  const transaction = await db.transaction()
   try {
     await DairyControl.update(dairyControl, {
       where: {
         registerId: dairyControl.registerId
-      }
+      },
+      transaction
     })
+    await transaction.commit()
     return await getDairyControl(dairyControl.registerId, dairyControl.farmerId)
   } catch (err) {
+    await transaction.rollback()
     throw err
   }
 }
 
 async function deleteDairyControl (id) {
+  const transaction = await db.transaction()
   try {
     await DairyControl.destroy({
       where: {
         registerId: id
-      }
+      },
+      transaction
     })
+    await transaction.commit()
   } catch (err) {
+    await transaction.rollback()
     throw err
   }
 }

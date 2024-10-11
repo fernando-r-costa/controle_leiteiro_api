@@ -1,14 +1,29 @@
 /* eslint-disable no-useless-catch */
+import db from '../repositories/db.js'
 import Farmer from '../models/farmer.model.js'
 
 async function createFarmer (farmer) {
-  const newFarmer = await Farmer.create(farmer)
-  return await getFarmer(newFarmer.farmerId)
+  const transaction = await db.transaction()
+  try {
+    const newFarmer = await Farmer.create(farmer, { transaction })
+    await transaction.commit()
+    return await getFarmer(newFarmer.farmerId)
+  } catch (err) {
+    await transaction.rollback()
+    throw err
+  }
 }
 
 async function updatePassword (farmer, password) {
-  farmer.password = password
-  await farmer.save()
+  const transaction = await db.transaction()
+  try {
+    farmer.password = password
+    await farmer.save({ transaction })
+    await transaction.commit()
+  } catch (err) {
+    await transaction.rollback()
+    throw err
+  }
 }
 
 async function updateFarmer (farmer) {
