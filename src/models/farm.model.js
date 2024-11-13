@@ -11,7 +11,10 @@ const Farm = db.define('farm', {
   },
   name: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   }
 }, {
   underscored: true,
