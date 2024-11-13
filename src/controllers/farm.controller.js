@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 import FarmService from '../services/farm.service.js'
-import validateRequiredFields from '../utils/utils.js'
+import Utils from '../utils/utils.js'
 
 async function createFarm (req, res, next) {
   try {
     const { name, farmerId } = req.body
-    validateRequiredFields([name, farmerId])
+    Utils.validateRequiredFields(['name', 'farmerId'], req.body)
     const farm = await FarmService.createFarm({ name, farmerId })
     res.send(farm)
     logger.info(`POST /farm - ${JSON.stringify(farm)}`)
@@ -17,7 +17,7 @@ async function createFarm (req, res, next) {
 async function updateFarm (req, res, next) {
   try {
     const { farmId, name, farmerId } = req.body
-    validateRequiredFields([farmId, name, farmerId])
+    Utils.validateRequiredFields(['farmId', 'name', 'farmerId'], req.body)
     const farm = await FarmService.updateFarm({ farmId, name, farmerId })
     res.send(farm)
     logger.info(`PUT /farm - ${JSON.stringify(farm)}`)

@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
 import AnimalService from '../services/animal.service.js'
-import validateRequiredFields from '../utils/utils.js'
+import Utils from '../utils/utils.js'
 
 async function createAnimal (req, res, next) {
   try {
-    const { number, calvingDate, farmerId, farmId } = req.body
-    validateRequiredFields([number, calvingDate, farmerId, farmId])
-    const animal = await AnimalService.createAnimal({ number, calvingDate, farmerId, farmId })
+    const { name, number, calvingDate, expectedDate, farmerId, farmId } = req.body
+    Utils.validateRequiredFields(['number', 'calvingDate', 'farmerId', 'farmId'], req.body)
+    const animal = await AnimalService.createAnimal({ name, number, calvingDate, expectedDate, farmerId, farmId })
     res.send(animal)
     logger.info(`POST /animal - ${JSON.stringify(animal)}`)
   } catch (err) {
@@ -16,9 +16,9 @@ async function createAnimal (req, res, next) {
 
 async function updateAnimal (req, res, next) {
   try {
-    const { animalId, number, calvingDate, farmerId, farmId } = req.body
-    validateRequiredFields([animalId, number, calvingDate, farmerId, farmId])
-    const animal = await AnimalService.updateAnimal({ animalId, number, calvingDate, farmerId, farmId })
+    const { animalId, name, number, calvingDate, expectedDate, farmerId, farmId } = req.body
+    Utils.validateRequiredFields(['animalId', 'number', 'calvingDate', 'farmerId', 'farmId'], req.body)
+    const animal = await AnimalService.updateAnimal({ animalId, name, number, calvingDate, expectedDate, farmerId, farmId })
     res.send(animal)
     logger.info(`PUT /animal - ${JSON.stringify(animal)}`)
   } catch (err) {

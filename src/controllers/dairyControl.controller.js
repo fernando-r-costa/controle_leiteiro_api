@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
 import DairyControlService from '../services/dairyControl.service.js'
-import validateRequiredFields from '../utils/utils.js'
+import Utils from '../utils/utils.js'
 
 async function createDairyControl (req, res, next) {
   try {
-    const { dairyDateControl, animalId, weightMilking1, farmerId } = req.body
-    validateRequiredFields([dairyDateControl, animalId, weightMilking1, farmerId])
-    const dairyControl = await DairyControlService.createDairyControl({ dairyDateControl, animalId, weightMilking1, farmerId })
+    const { dairyDateControl, animalId, weightMilking1, weightMilking2, weightMilking3, farmerId } = req.body
+    Utils.validateRequiredFields(['dairyDateControl', 'animalId', 'weightMilking1', 'farmerId'], req.body)
+    const dairyControl = await DairyControlService.createDairyControl({ dairyDateControl, animalId, weightMilking1, weightMilking2, weightMilking3, farmerId })
     res.send(dairyControl)
     logger.info(`POST /dairyControl - ${JSON.stringify(dairyControl)}`)
   } catch (err) {
@@ -16,9 +16,9 @@ async function createDairyControl (req, res, next) {
 
 async function updateDairyControl (req, res, next) {
   try {
-    const { registerId, dairyDateControl, animalId, weightMilking1, farmerId } = req.body
-    validateRequiredFields([registerId, dairyDateControl, animalId, weightMilking1, farmerId])
-    const dairyControl = await DairyControlService.updateDairyControl({ registerId, dairyDateControl, animalId, weightMilking1, farmerId })
+    const { registerId, dairyDateControl, animalId, weightMilking1, weightMilking2, weightMilking3, farmerId } = req.body
+    Utils.validateRequiredFields(['registerId', 'dairyDateControl', 'animalId', 'weightMilking1', 'farmerId'], req.body)
+    const dairyControl = await DairyControlService.updateDairyControl({ registerId, dairyDateControl, animalId, weightMilking1, weightMilking2, weightMilking3, farmerId })
     res.send(dairyControl)
     logger.info(`PUT /dairyControl - ${JSON.stringify(dairyControl)}`)
   } catch (err) {

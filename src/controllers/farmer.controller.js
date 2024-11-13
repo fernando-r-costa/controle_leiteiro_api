@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 import FarmerService from '../services/farmer.service.js'
-import validateRequiredFields from '../utils/utils.js'
+import Utils from '../utils/utils.js'
 
 async function createFarmer (req, res, next) {
   try {
     const { name, email, password, phone } = req.body
-    validateRequiredFields([name, email, password, phone])
+    Utils.validateRequiredFields(['name', 'email', 'password', 'phone'], req.body)
     const farmer = await FarmerService.createFarmer({ name, email, password, phone })
     res.send(farmer)
     logger.info(`POST /farmer - ${JSON.stringify(farmer)}`)
@@ -17,7 +17,7 @@ async function createFarmer (req, res, next) {
 async function loginFarmer (req, res, next) {
   try {
     const { email, password } = req.body
-    validateRequiredFields([email, password])
+    Utils.validateRequiredFields(['email', 'password'], req.body)
     const { token, farmer } = await FarmerService.loginFarmer({ email, password })
     res.send({ token })
     logger.info(`POST /farmer/login - ${JSON.stringify({ farmerId: farmer.farmerId, name: farmer.name })}`)
@@ -29,7 +29,7 @@ async function loginFarmer (req, res, next) {
 async function updatePassword (req, res, next) {
   try {
     const { name, email, password, phone } = req.body
-    validateRequiredFields([name, email, password, phone])
+    Utils.validateRequiredFields(['name', 'email', 'password', 'phone'], req.body)
     const updatedFarmer = await FarmerService.updatePassword({ name, email, password, phone })
     res.send(updatedFarmer)
     logger.info(`PUT /farmer/password - ${JSON.stringify(updatedFarmer)}`)
@@ -41,7 +41,7 @@ async function updatePassword (req, res, next) {
 async function updateFarmer (req, res, next) {
   try {
     const { farmerId, name, email, phone } = req.body
-    validateRequiredFields([farmerId, name, email, phone])
+    Utils.validateRequiredFields(['farmerId', 'name', 'email', 'phone'], req.body)
     const updatedFarmer = await FarmerService.updateFarmer({ farmerId, name, email, phone })
     res.send(updatedFarmer)
     logger.info(`PUT /farmer/update - ${JSON.stringify(updatedFarmer)}`)
