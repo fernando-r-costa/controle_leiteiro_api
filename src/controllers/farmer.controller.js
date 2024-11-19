@@ -19,7 +19,7 @@ async function loginFarmer (req, res, next) {
     const { email, password } = req.body
     Utils.validateRequiredFields(['email', 'password'], req.body)
     const { token, farmer } = await FarmerService.loginFarmer({ email, password })
-    res.send({ token })
+    res.send({ token, farmerId: farmer.farmerId })
     logger.info(`POST /farmer/login - ${JSON.stringify({ farmerId: farmer.farmerId, name: farmer.name })}`)
   } catch (err) {
     next(err)
