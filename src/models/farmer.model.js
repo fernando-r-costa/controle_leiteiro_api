@@ -2,6 +2,8 @@ import Sequelize from 'sequelize'
 import bcrypt from 'bcryptjs'
 import db from '../repositories/db.js'
 
+const pioneerDeadline = new Date('2025-12-31T23:59:59-03:00')
+
 const Farmer = db.define('farmer', {
   farmerId: {
     type: Sequelize.INTEGER,
@@ -36,6 +38,14 @@ const Farmer = db.define('farmer', {
     type: Sequelize.ENUM('farmer', 'admin'),
     allowNull: false,
     defaultValue: 'farmer'
+  },
+  pioneerSeal: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: () => {
+      const now = new Date()
+      return now <= pioneerDeadline
+    }
   }
 }, {
   underscored: true,
@@ -54,7 +64,7 @@ const Farmer = db.define('farmer', {
       }
     }
   },
-  timestamps: false
+  timestamps: true
 })
 
 export default Farmer
