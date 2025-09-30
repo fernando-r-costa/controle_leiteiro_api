@@ -115,15 +115,15 @@ _(Esta é uma lista simplificada. A API contém mais rotas para atualização e 
 Fernando R Costa
 
 <p>
-<a href="https://www.linkedin.com/in/fernando-r-costa/" target="_blank">
-<img alt="LinkedIn" src="https://www.google.com/search?q=https://img.shields.io/badge/LinkedIn-0077B5%3Fstyle%3Dfor-the-badge%26logo%3Dlinkedin%26logoColor%3Dwhite">
-</a>
-<a href="https://www.google.com/search?q=https://www.instagram.com/fernandorcosta25/" target="_blank">
-<img alt="Instagram" src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white">
-</a>
-<a href="https://www.google.com/search?q=https://www.youtube.com/%40controleleiteiro" target="_blank">
-<img alt="YouTube" src="https://www.google.com/search?q=https://img.shields.io/badge/YouTube-FF0000%3Fstyle%3Dfor-the-badge%26logo%3Dyoutube%26logoColor%3Dwhite">
-</a>
+  <a href="https://www.linkedin.com/in/fernando-r-costa/" target="_blank">
+    <img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
+  </a>
+  <a href="https://www.instagram.com/fernandorcosta25/" target="_blank">
+    <img alt="Instagram" src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white">
+  </a>
+  <a href="https://www.youtube.com/@controle.leiteiro" target="_blank">
+    <img alt="YouTube" src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white">
+  </a>
 </p>
 
 ## 📄 Licença
