@@ -55,11 +55,14 @@ async function getDairyControls (farmId) {
       return await DairyControl.findAll({
         include: {
           model: Animal,
-          where: { farmId }
+          where: { farmId },
+          required: true
         }
       })
     } else {
-      return await DairyControl.findAll()
+      return await DairyControl.findAll({
+        include: { model: Animal, required: true }
+      })
     }
   } catch (err) {
     throw err
@@ -145,7 +148,7 @@ async function getAllByDairyDateControl (farmerId, dairyDateControl) {
       return { message: 'Nenhum controle de leite encontrado.' }
     }
 
-    return dairyControls
+    return validDairyControls
   } catch (err) {
     throw err
   }
