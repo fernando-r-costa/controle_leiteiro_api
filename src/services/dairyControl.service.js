@@ -20,7 +20,8 @@ async function updateDairyControl (dairyControl) {
   if (!hasDairyControl) {
     throw new Error('Registro não encontrado')
   }
-  if (dairyControl.registerId !== hasDairyControl.registerId || dairyControl.dairyDateControl !== hasDairyControl.dairyDateControl || dairyControl.animalId !== hasDairyControl.animalId) {
+  const isSameDate = new Date(dairyControl.dairyDateControl).toISOString() === hasDairyControl.dairyDateControl.toISOString()
+  if (dairyControl.registerId !== hasDairyControl.registerId || !isSameDate || dairyControl.animalId !== hasDairyControl.animalId) {
     throw new Error('Não é permitido alterar os campos')
   }
   return await DairyControlRepository.updateDairyControl(dairyControl)
@@ -52,7 +53,7 @@ async function getAllByAnimalId (params) {
 }
 
 async function getAllByDairyDateControl (params) {
-  return await DairyControlRepository.getAllByDairyDateControl(params.id, params.dairyDateControl)
+  return await DairyControlRepository.getAllByDairyDateControl(params.id, params.farmId, params.dairyDateControl)
 }
 
 async function getAllDates (params) {

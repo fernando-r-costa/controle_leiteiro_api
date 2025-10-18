@@ -3,6 +3,7 @@ import db from '../repositories/db.js'
 import DairyControl from '../models/dairyControl.model.js'
 import Animal from '../models/animal.model.js'
 import Farm from '../models/farm.model.js'
+import { where } from 'sequelize'
 
 async function createDairyControl (dairyControl) {
   const transaction = await db.transaction()
@@ -127,28 +128,28 @@ async function getAllByAnimalId (animalId, farmerId) {
   }
 }
 
-async function getAllByDairyDateControl (farmerId, dairyDateControl) {
+async function getAllByDairyDateControl (farmerId, farmId, dairyDateControl) {
   try {
     const dairyControls = await DairyControl.findAll({
       where: {
         dairyDateControl
       },
-      include: {
+      include: [{
         model: Animal,
+        required: true,
+        where: { farmId },
         include: {
           model: Farm,
           attributes: ['farmerId'],
           where: { farmerId }
         }
-      },
+      }],
       order: [['animalId', 'ASC']]
     })
-    const validDairyControls = dairyControls.filter(dc => dc.animal !== null)
-    if (validDairyControls.length === 0) {
+    if (!dairyControls || dairyControls.length === 0) {
       return { message: 'Nenhum controle de leite encontrado.' }
     }
-
-    return validDairyControls
+    return dairyControls
   } catch (err) {
     throw err
   }
