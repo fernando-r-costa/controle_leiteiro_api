@@ -1,5 +1,5 @@
-# Imagem oficial do node como base
-FROM node:22
+# Imagem oficial do node como base (versão corrigida)
+FROM node:24.13.0
 
 # Diretório de trabalho
 WORKDIR /usr
