@@ -1,5 +1,6 @@
 # Imagem oficial do node como base (versão corrigida)
-FROM node:24.13.0
+# Usa tag major para manter versão 24.x; atualize para um patch específico assim que disponível (ex.: 24.13.0+).
+FROM node:24
 
 # Diretório de trabalho
 WORKDIR /usr
